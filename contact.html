@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LF4QFMS767"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-LF4QFMS767');
+  </script>
+  <meta charset="UTF-8" />
+  <title>Christian - Contact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="nav-shell">
+      <nav class="nav">
+        <div class="nav-left">
+          <a href="index.html" class="logo">
+            <span class="logo-mark"></span>
+            <span class="logo-text">Christian</span>
+          </a>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle menu">
+          <span></span><span></span>
+        </button>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="works.html" class="nav-link">Works</a>
+          <a href="story.html" class="nav-link">Story</a>
+          <a href="contact.html" class="nav-link nav-cta active">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <section class="section fade-up">
+        <div class="section-header">
+          <h1 class="section-title big">Contact</h1>
+          <p class="section-subtitle">
+            You don't need a papyrus scroll, just a clear message. We'll do the rest together.
+          </p>
+        </div>
+
+        <div class="contact-layout">
+          <section class="contact-card glass">
+            <h2>Let's Talk</h2>
+            <p>
+              Whether it's an idea, a serious project or an experiment,
+              I like to transform concepts into something concrete and usable.
+            </p>
+
+            <form class="contact-form" id="contact-form" action="https://formspree.io/f/xangyryp" method="POST">
+              <div class="form-row">
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" placeholder="How should I call you?" required />
+              </div>
+
+              <div class="form-row">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="Where I can contact you?" required />
+              </div>
+
+              <div class="form-row">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4" placeholder="Tell me in short what you have in mind." required ></textarea>
+              </div>
+
+              <p id="contact-status" class="form-status"></p>
+
+              <button type="submit" class="btn primary-btn full-width">
+                Send
+              </button>
+            </form>
+          </section>
+
+          <aside class="contact-side glass-soft">
+            <h3>Useful Info</h3>
+            <ul class="mini-list">
+              <li>Time zone: Europe/Rome</li>
+              <li>Languages: English, Italian</li>
+              <li>Focus: Web, Server, AI Bot</li>
+            </ul>
+
+            <div class="status-pill">
+              <span class="status-dot"></span>
+              <span class="status-text">Available for interesting projects.</span>
+            </div>
+
+            <div class="contact-links">
+              <a href="https://github.com/caruvip" class="contact-link">GitHub</a>
+              <a href="mailto:christian.caruso.07@protonmail.com" class="contact-link">Email</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> Christian Caruso </p>
+    </footer>
+  </div>
+</body>
+</html>

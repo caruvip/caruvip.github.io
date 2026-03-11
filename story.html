@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LF4QFMS767"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-LF4QFMS767');
+  </script>
+  <meta charset="UTF-8" />
+  <title>Christian - Story</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="nav-shell">
+      <nav class="nav">
+        <div class="nav-left">
+          <a href="index.html" class="logo">
+            <span class="logo-mark"></span>
+            <span class="logo-text">Christian</span>
+          </a>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle menu">
+          <span></span><span></span>
+        </button>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="works.html" class="nav-link">Works</a>
+          <a href="story.html" class="nav-link active">Story</a>
+          <a href="contact.html" class="nav-link nav-cta">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <section class="section fade-up">
+        <div class="section-header">
+          <h1 class="section-title big">Story</h1>
+          <p class="section-subtitle">
+            A compact and interactive timeline about who I am, where I come from
+            and where I want to go.
+          </p>
+        </div>
+
+        <div class="story-layout">
+          <div class="story-intro glass">
+            <h2>Who I am in a few lines</h2>
+            <p>
+              I'm a developer born in 2007 who loves building things, from Minecraft servers to web applications.
+              I'm passionate about <span class="highlight">automation, Linux, and creating practical solutions</span>.
+            </p>
+            <p>
+              This page tells the story of my journey into tech, how I've grown as a developer,
+              and what I'm working on right now. I hope you enjoy learning about my path.
+            </p>
+          </div>
+
+          <!-- TIMELINE -->
+          <section class="timeline glass">
+            <div class="timeline-header">
+              <h2>My Journey</h2>
+            </div>
+
+            <div class="timeline-list">
+              <!-- ITEM -->
+              <details class="timeline-item">
+                <summary>
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-meta">
+                    <span class="timeline-year">2023</span>
+                    <h3>Built my first PC</h3>
+                  </div>
+                </summary>
+                <div class="timeline-body">
+                  <p>
+                    Built my first PC, which sparked my interest in hardware and software.
+                    This experience led me to explore the world of technology and programming,
+                    setting the foundation for my future projects and learning journey.
+                  </p>
+                </div>
+              </details>
+
+              <!-- ITEM -->
+              <details class="timeline-item">
+                <summary>
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-meta">
+                    <span class="timeline-year">2024</span>
+                    <h3>Minecraft Servers & Web Development</h3>
+                  </div>
+                </summary>
+                <div class="timeline-body">
+                  <p>
+                    Started developing Minecraft game servers on commission, creating custom gameplay experiences.
+                    During this period, I also began learning web development to expand my skills and build
+                    better digital solutions. This marked the beginning of my full-stack journey.
+                  </p>
+                </div>
+              </details>
+
+              <!-- ITEM -->
+              <details class="timeline-item">
+                <summary>
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-meta">
+                    <span class="timeline-year">2025</span>
+                    <h3>Linux & Programming Languages</h3>
+                  </div>
+                </summary>
+                <div class="timeline-body">
+                  <p>
+                    Discovered the world of Linux and started learning Python for scripting and automation.
+                    Also began studying SQL through school, understanding databases and data management.
+                    These skills opened new possibilities for backend development and system administration.
+                  </p>
+                </div>
+              </details>
+
+              <!-- ITEM -->
+              <details class="timeline-item">
+                <summary>
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-meta">
+                    <span class="timeline-year">Late 2025 - Early 2026</span>
+                    <h3>Home Server & NAS</h3>
+                  </div>
+                </summary>
+                <div class="timeline-body">
+                  <p>
+                    Built my own home server with NAS functionality. This project deepened my understanding of Linux,
+                    networking, and system administration. It became the foundation for running my own infrastructure
+                    and hosting personal projects.
+                  </p>
+                </div>
+              </details>
+
+              <!-- ITEM -->
+              <details class="timeline-item">
+                <summary>
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-meta">
+                    <span class="timeline-year">2026</span>
+                    <h3>Diploma & AI Home Automation</h3>
+                  </div>
+                </summary>
+                <div class="timeline-body">
+                  <p>
+                    In 2026 I will graduate with a diploma in Computer Science and Telecommunications
+                    from ITIS Magistri Cumacini. At the same time, I'm developing an AI automation bot that controls
+                    and automates my homeserver, using Raspberry Pi and Zeroclaw.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> Christian Caruso </p>
+    </footer>
+  </div>
+</body>
+</html>
