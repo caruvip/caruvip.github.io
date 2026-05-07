@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LF4QFMS767"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LF4QFMS767');
+  </script>
+  <meta charset="UTF-8" />
+  <title>Minecraft Server Setup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ─── PAGE-SPECIFIC EXTRAS ─── */
+    :root {
+      --mc-purple: #a855f7;
+      --mc-purple-soft: rgba(168, 85, 247, 0.18);
+      --mc-gold: #f59e0b;
+      --mc-gold-soft: rgba(245, 158, 11, 0.15);
+      --mc-green: #22c55e;
+    }
+
+    /* HERO BANNER */
+    .mc-hero {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .mc-hero img {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 480px;
+      object-fit: cover;
+    }
+
+    .mc-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(5, 5, 9, 0.92) 0%,
+        rgba(5, 5, 9, 0.55) 50%,
+        transparent 100%
+      );
+      display: flex;
+      align-items: center;
+      padding: 3rem;
+    }
+
+    .mc-hero-text {
+      max-width: 480px;
+    }
+
+    .mc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(168, 85, 247, 0.6);
+      background: rgba(168, 85, 247, 0.12);
+      font-size: 0.75rem;
+      color: var(--mc-purple);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .mc-hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0 0 0.8rem;
+      background: linear-gradient(120deg, #ffffff 30%, var(--mc-purple));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .mc-hero-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin: 0 0 1.5rem;
+      line-height: 1.6;
+    }
+
+    .mc-hero-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      padding: 1.2rem 1rem;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      backdrop-filter: blur(16px);
+      transition: transform 240ms ease, border-color 240ms ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(168, 85, 247, 0.4);
+    }
+
+    .stat-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--mc-purple);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* SECTION DIVIDER */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 2.5rem 0 1.5rem;
+    }
+
+    .section-divider h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      white-space: nowrap;
+      color: var(--text);
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(148, 163, 184, 0.25), transparent);
+    }
+
+    /* ENCHANTMENT CARDS (effects grid) */
+    .enchant-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .enchant-card {
+      padding: 1.4rem;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease;
+      cursor: default;
+    }
+
+    .enchant-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .enchant-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .enchant-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .enchant-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .enchant-passive {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      margin: 0 0 0.25rem;
+    }
+
+    .enchant-effects {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .enchant-effects li {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .enchant-effects li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      opacity: 0.7;
+    }
+
+    .enchant-spark {
+      padding: 0.7rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.25);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .enchant-spark strong {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    /* Color themes per effect */
+    .eff-fire  { --ec: #f97316; --ec-soft: rgba(249,115,22,0.1); }
+    .eff-frost { --ec: #67e8f9; --ec-soft: rgba(103,232,249,0.1); }
+    .eff-ocean { --ec: #38bdf8; --ec-soft: rgba(56,189,248,0.1); }
+    .eff-heart { --ec: #f43f5e; --ec-soft: rgba(244,63,94,0.1); }
+    .eff-speed { --ec: #a3e635; --ec-soft: rgba(163,230,53,0.1); }
+    .eff-invis { --ec: #d946ef; --ec-soft: rgba(217,70,239,0.1); }
+    .eff-regen { --ec: #4ade80; --ec-soft: rgba(74,222,128,0.1); }
+    .eff-str   { --ec: #ef4444; --ec-soft: rgba(239,68,68,0.1); }
+    .eff-thunder { --ec: #facc15; --ec-soft: rgba(250,204,21,0.1); }
+    .eff-haste { --ec: #fb923c; --ec-soft: rgba(251,146,60,0.1); }
+    .eff-ender { --ec: #c084fc; --ec-soft: rgba(192,132,252,0.1); }
+    .eff-apo   { --ec: #e879f9; --ec-soft: rgba(232,121,249,0.1); }
+
+    .enchant-card {
+      border-color: var(--ec-soft, rgba(148,163,184,0.18));
+    }
+
+    .enchant-card:hover {
+      box-shadow: 0 16px 40px var(--ec-soft, rgba(0,0,0,0.3));
+      border-color: var(--ec, rgba(148,163,184,0.4));
+    }
+
+    .enchant-name { color: var(--ec, var(--text)); }
+    .enchant-passive { color: var(--ec, var(--text-muted)); }
+    .enchant-effects li::before { color: var(--ec, var(--accent)); }
+    .enchant-icon { background: var(--ec-soft, rgba(148,163,184,0.08)); }
+    .enchant-spark strong { color: var(--ec, var(--accent)); }
+
+    /* FEATURES 2-COL */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .feature-card {
+      padding: 1.5rem;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      backdrop-filter: blur(14px);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: transform 260ms ease, border-color 260ms ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(168, 85, 247, 0.35);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .feature-body h4 {
+      margin: 0 0 0.4rem;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .feature-body p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* GALLERY GRID */
+    .gallery-grid-full {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.85rem;
+    }
+
+    /* PURCHASE BOX */
+    .purchase-box {
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(15, 23, 42, 0.85) 60%);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      padding: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 0 60px rgba(168, 85, 247, 0.08);
+    }
+
+    .purchase-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 0 0 0.5rem;
+      background: linear-gradient(120deg, #fff, var(--mc-purple));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .purchase-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0 0 1.2rem;
+      line-height: 1.6;
+    }
+
+    .purchase-includes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .include-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      background: rgba(168, 85, 247, 0.08);
+      font-size: 0.78rem;
+      color: #c4b5fd;
+    }
+
+    .include-chip::before {
+      content: "✓";
+      color: var(--mc-green);
+      font-weight: 700;
+    }
+
+    .purchase-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 200px;
+    }
+
+    .price-display {
+      text-align: center;
+    }
+
+    .price-display .price-label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .price-display .price-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--mc-purple);
+    }
+
+    .purchase-cta .btn {
+      width: 100%;
+      font-size: 1rem;
+      padding: 0.9rem 1.5rem;
+      font-weight: 700;
+    }
+
+    .purchase-cta .btn.primary-btn {
+      background: linear-gradient(135deg, var(--mc-purple), #7c3aed);
+      color: #fff;
+      box-shadow: 0 12px 36px rgba(168, 85, 247, 0.4);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .purchase-cta .btn.primary-btn:hover {
+      box-shadow: 0 16px 44px rgba(168, 85, 247, 0.55);
+    }
+
+    /* PREVIEW IMAGES SECTION */
+    .preview-two {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    /* REQUIREMENTS + AVAILABILITY SPLIT */
+    .req-avail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .enchant-grid { grid-template-columns: repeat(2, 1fr); }
+      .purchase-box { grid-template-columns: 1fr; }
+      .purchase-cta { width: 100%; }
+      .mc-hero-title { font-size: 2rem; }
+    }
+
+    @media (max-width: 640px) {
+      .enchant-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .gallery-grid-full { grid-template-columns: repeat(2, 1fr); }
+      .req-avail { grid-template-columns: 1fr; }
+      .preview-two { grid-template-columns: 1fr; }
+      .mc-hero-overlay { padding: 1.5rem; }
+      .mc-hero-title { font-size: 1.6rem; }
+      .mc-hero-sub { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- NAV -->
+    <header class="nav-shell">
+      <nav class="nav">
+        <div class="nav-left">
+          <a href="index.html" class="logo">
+            <span class="logo-mark"></span>
+            <span class="logo-text">Christian</span>
+          </a>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle menu">
+          <span></span><span></span>
+        </button>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="works.html" class="nav-link active">Works</a>
+          <a href="language.html" class="nav-link">Languages</a>
+          <a href="story.html" class="nav-link">Story</a>
+          <a href="contact.html" class="nav-link nav-cta">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- MAIN -->
+    <main class="page">
+      <a href="works.html" class="btn subtle-btn" style="margin-bottom: 1.5rem; display: inline-flex;">&larr; Back to Works</a>
+
+      <!-- HERO BANNER -->
+      <div class="mc-hero fade-up">
+        <img src="immagini/dream-1.webp" alt="Dream Survival — Minecraft Server" />
+        <div class="mc-hero-overlay">
+          <div class="mc-hero-text">
+            <span class="mc-badge">⚔️ Minecraft Java 1.21+</span>
+            <h1 class="mc-hero-title">Custom Survival</h1>
+            <p class="mc-hero-sub">Un setup completo per server Minecraft survival con plugin custom esclusivi, interfacce avanzate e un'esperienza di gioco unica e progressiva.</p>
+            <div class="mc-hero-actions">
+              <a href="https://builtbybit.com/members/caruvip" class="btn primary-btn" style="background: linear-gradient(135deg, #a855f7, #7c3aed); color:#fff; border-color:rgba(255,255,255,0.1); box-shadow:0 12px 36px rgba(168,85,247,0.4);">Acquista su BuiltByBit</a>
+              <a href="contact.html" class="btn ghost-btn">Contattami</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS ROW -->
+      <div class="stats-row fade-up delay-1">
+        <div class="stat-card">
+          <div class="stat-icon">🔌</div>
+          <div class="stat-value">12+</div>
+          <div class="stat-label">Plugin Custom</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value">12</div>
+          <div class="stat-label">Effetti Augmented</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏟️</div>
+          <div class="stat-value">3</div>
+          <div class="stat-label">Arene Dungeon</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔄</div>
+          <div class="stat-value">1.21+</div>
+          <div class="stat-label">Sempre Aggiornato</div>
+        </div>
+      </div>
+
+      <!-- FEATURES HIGHLIGHTS -->
+      <div class="section-divider fade-up">
+        <h2>Caratteristiche Principali</h2>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="features-grid fade-up delay-1" style="margin-bottom: 2.5rem;">
+        <div class="feature-card">
+          <div class="feature-icon">🔮</div>
+          <div class="feature-body">
+            <h4>Plugin Custom Esclusivi</h4>
+            <p>Sviluppati internamente dal team, disponibili solo in questo setup. Un sistema di effetti "Augmented" completamente originale che modifica il gameplay in modo profondo.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎮</div>
+          <div class="feature-body">
+            <h4>Gameplay Premium & Bilanciato</h4>
+            <p>Sistemi ben integrati tra loro per un'esperienza progressiva e non ripetitiva. Dungeon, upgrade, warps, kits e molto altro completamente configurati.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📖</div>
+          <div class="feature-body">
+            <h4>Supporto & Documentazione</h4>
+            <p>FAQ completa, documentazione dettagliata e supporto permanente per la personalizzazione e qualsiasi problematica post-acquisto.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-body">
+            <h4>Resource Pack Incluso</h4>
+            <p>Texture pack esclusivo che trasforma completamente l'aspetto del gioco. Un'esperienza visiva unica e coerente con tutti i plugin del setup.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVIEW SCREENSHOTS -->
+      <div class="section-divider fade-up">
+        <h2>Interfaccia & UI</h2>
+        <div class="divider-line"></div>
+      </div>
+      <div class="preview-two fade-up delay-1" style="margin-bottom: 2.5rem;">
+        <div class="gallery-item">
+          <img class="gallery-image" src="immagini/dream-2.webp" alt="UI del server" loading="lazy" />
+        </div>
+        <div class="gallery-item">
+          <img class="gallery-image" src="immagini/dream-4.webp" alt="Interfaccia gameplay" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- AUGMENTED EFFECTS -->
+      <div class="section-divider fade-up">
+        <h2>Effetti Augmented</h2>
+        <div class="divider-line"></div>
+        <span class="pill accent">12 effetti unici</span>
+      </div>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin: 0 0 1.5rem; line-height:1.6;" class="fade-up">
+        Il cuore del setup. Ogni effetto Augmented conferisce abilità passive e un'abilità speciale "Spark" attivabile, trasformando completamente lo stile di gioco del giocatore.
+      </p>
+
+      <div class="enchant-grid fade-up delay-1" style="margin-bottom: 2.5rem;">
+
+        <!-- FIRE -->
+        <div class="enchant-card eff-fire">
+          <div class="enchant-header">
+            <div class="enchant-icon">🔥</div>
+            <h3 class="enchant-name">Augmented Fire</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Fire Resistance (2s ogni 1s)</li>
+              <li>Frecce infuocate con arco carico</li>
+              <li>Nuoto nella lava, no fall damage in lava</li>
+              <li>Ogni 10 colpi: incendia per 5s</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Incendia i nemici nel raggio di 5 blocchi
+          </div>
+        </div>
+
+        <!-- FROST -->
+        <div class="enchant-card eff-frost">
+          <div class="enchant-header">
+            <div class="enchant-icon">❄️</div>
+            <h3 class="enchant-name">Augmented Frost</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Speed 3 su ghiaccio e neve</li>
+              <li>Congela il giocatore ogni 10 colpi</li>
+              <li>Nuoto nella neve in polvere</li>
+              <li>I congelati non usano windcharges</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Riduce la forza di salto e congela ogni colpo
+          </div>
+        </div>
+
+        <!-- OCEAN -->
+        <div class="enchant-card eff-ocean">
+          <div class="enchant-header">
+            <div class="enchant-icon">🌊</div>
+            <h3 class="enchant-name">Augmented Ocean</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Nuoto più veloce</li>
+              <li>Respiro sott'acqua</li>
+              <li>I vicini cominciano ad annegare</li>
+              <li>I tridenti trascinano i giocatori</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Crea un vortice d'acqua
+          </div>
+        </div>
+
+        <!-- HEART -->
+        <div class="enchant-card eff-heart">
+          <div class="enchant-header">
+            <div class="enchant-icon">❤️</div>
+            <h3 class="enchant-name">Augmented Heart</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>+5 cuori permanenti</li>
+              <li>Ogni cibo dà cuori assorbimento</li>
+              <li>Egaps danno +10 cuori assorbimento</li>
+              <li>Vedi la vita avversaria ogni 10 colpi</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Guarisce istantaneamente a 20 cuori
+          </div>
+        </div>
+
+        <!-- SPEED -->
+        <div class="enchant-card eff-speed">
+          <div class="enchant-header">
+            <div class="enchant-icon">💨</div>
+            <h3 class="enchant-name">Augmented Speed</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Speed 1 base</li>
+              <li>+1 livello di velocità ad ogni colpo</li>
+              <li>Armi a distanza si caricano 1.5× più veloci</li>
+              <li>I frame di invincibilità dimezzati</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Speed Dash — scatto in avanti
+          </div>
+        </div>
+
+        <!-- INVISIBILITY -->
+        <div class="enchant-card eff-invis">
+          <div class="enchant-header">
+            <div class="enchant-icon">👁️</div>
+            <h3 class="enchant-name">Augmented Invisibility</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Invisibilità permanente</li>
+              <li>Colpo con arco pieno: acceca per 5s</li>
+              <li>I mob non possono prenderti di mira</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Cerchio 5×5 di polvere nera; alleati invisibili, nemici accecati
+          </div>
+        </div>
+
+        <!-- REGENERATION -->
+        <div class="enchant-card eff-regen">
+          <div class="enchant-header">
+            <div class="enchant-icon">➕</div>
+            <h3 class="enchant-name">Augmented Regeneration</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Ogni colpo: Rigenerazione 2 per 1s</li>
+              <li>Ogni cura: +3 barre di saturazione</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Applica effetto lifesteal
+          </div>
+        </div>
+
+        <!-- STRENGTH -->
+        <div class="enchant-card eff-str">
+          <div class="enchant-header">
+            <div class="enchant-icon">⚔️</div>
+            <h3 class="enchant-name">Augmented Strength</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Danno doppio a tutti i mob</li>
+              <li>Disabilita scudi per 10 secondi</li>
+              <li>Armi a distanza perforano gli scudi</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Attiva auto-crit per 15 secondi
+          </div>
+        </div>
+
+        <!-- THUNDER -->
+        <div class="enchant-card eff-thunder">
+          <div class="enchant-header">
+            <div class="enchant-icon">⚡</div>
+            <h3 class="enchant-name">Augmented Thunder</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Fulmine a catena</li>
+              <li>Il tridente evoca fulmini</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Colpisce i nemici con fulmini e scatena un temporale
+          </div>
+        </div>
+
+        <!-- HASTE -->
+        <div class="enchant-card eff-haste">
+          <div class="enchant-header">
+            <div class="enchant-icon">⛏️</div>
+            <h3 class="enchant-name">Augmented Haste</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Fortune 5 + Efficiency 10 + Unbreaking 10</li>
+              <li>Cooldown scudo dimezzato se stordito</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Attacca più velocemente
+          </div>
+        </div>
+
+        <!-- ENDER -->
+        <div class="enchant-card eff-ender">
+          <div class="enchant-header">
+            <div class="enchant-icon">🌑</div>
+            <h3 class="enchant-name">Augmented Ender</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>I vicini ottengono l'effetto glow</li>
+              <li>Il respiro del drago lancia palle di fuoco malefiche</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Teleport al cursore (15 blocchi); uccide ogni mob e maledice i giocatori
+          </div>
+        </div>
+
+        <!-- APOPHIS -->
+        <div class="enchant-card eff-apo">
+          <div class="enchant-header">
+            <div class="enchant-icon">🧪</div>
+            <h3 class="enchant-name">Augmented Apophis</h3>
+          </div>
+          <div>
+            <div class="enchant-passive">Passive Effects</div>
+            <ul class="enchant-effects">
+              <li>Combina gli effetti di Fire, Emerald e Heart</li>
+              <li>Skin e nametag personalizzati</li>
+            </ul>
+          </div>
+          <div class="enchant-spark">
+            <strong>⚡ Spark Effect</strong>
+            Attiva le Spark di Fire, Emerald e Heart; acceca lo schermo al colpo
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FULL GALLERY -->
+      <div class="section-divider fade-up">
+        <h2>Galleria Completa</h2>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="gallery-grid-full fade-up delay-1" style="margin-bottom: 2.5rem;">
+        <div class="gallery-item">
+          <a href="immagini/dream-1.webp" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/dream-1.webp" alt="Dream Survival menu" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/dream-2.webp" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/dream-2.webp" alt="Server features" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/dream-4.webp" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/dream-4.webp" alt="Gameplay showcase" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/dream-3.webp" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/dream-3.webp" alt="Custom items" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/443ff03065ca13345938dd3019e4e6d59c2fadc2_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/443ff03065ca13345938dd3019e4e6d59c2fadc2_0.png" alt="Premium plugins" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/53438a8052f78c1e3a0bd6b1ce5d066440f0d6de_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/53438a8052f78c1e3a0bd6b1ce5d066440f0d6de_0.png" alt="Support documentation" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/6f3181d1829d9e5fcca07725fa20b9223f0b6c19_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/6f3181d1829d9e5fcca07725fa20b9223f0b6c19_0.png" alt="Enchanted effects" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/72ab1cedc189b45675ea46c6bf4c09b385fc7b0a_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/72ab1cedc189b45675ea46c6bf4c09b385fc7b0a_0.png" alt="Enchanted effects" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/8fdf33da37da86407227730fe23b287e271bb5e3_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/8fdf33da37da86407227730fe23b287e271bb5e3_0.png" alt="Enchanted effects" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/abaaf7501999a808014d6576adceb00f9a947bad_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/abaaf7501999a808014d6576adceb00f9a947bad_0.png" alt="Enchanted effects" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/c184439f1a18b76b87124d397c91af8d87c175bd_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/c184439f1a18b76b87124d397c91af8d87c175bd_0.png" alt="Enchanted effects" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/ce40aab7cd7fbeb5da6b066feecfc1ba25eb54c6_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/ce40aab7cd7fbeb5da6b066feecfc1ba25eb54c6_0.png" alt="Enchanted effects" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/dbded7b5cee9c4d6db425716a3ed8611ce85fb32_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/dbded7b5cee9c4d6db425716a3ed8611ce85fb32_0.png" alt="Enchanted effects" loading="lazy" />
+          </a>
+        </div>
+        <div class="gallery-item">
+          <a href="immagini/f8d3e628a5cecbe35a06f14a704de471af057eea_0.png" target="_blank" rel="noopener noreferrer">
+            <img class="gallery-image" src="immagini/f8d3e628a5cecbe35a06f14a704de471af057eea_0.png" alt="Game systems" loading="lazy" />
+          </a>
+        </div>
+      </div>
+
+      <!-- REQUIREMENTS & AVAILABILITY -->
+      <div class="req-avail fade-up">
+        <div class="info-block">
+          <h3 class="info-title">Requisiti di Sistema</h3>
+          <ul class="info-list">
+            <li>Minecraft Java Edition 1.21+</li>
+            <li>RAM: minimo 4 GB dedicata</li>
+            <li>Connessione internet stabile</li>
+            <li>Spigot / Paper Server</li>
+            <li>Plugin Manager compatibile</li>
+            <li>Plugin custom supportati</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <h3 class="info-title">Cosa è incluso</h3>
+          <ul class="info-list">
+            <li>Setup completo pronto all'uso</li>
+            <li>12 effetti Augmented configurati</li>
+            <li>Dungeon system (Easy / Medium / Hard)</li>
+            <li>Sistema di upgrade e valuta</li>
+            <li>Resource Pack esclusivo</li>
+            <li>Documentazione + supporto post-vendita</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PURCHASE CTA -->
+      <div class="purchase-box fade-up" style="margin-bottom: 2rem;">
+        <div>
+          <h2 class="purchase-title">Pronto ad acquistare?</h2>
+          <p class="purchase-desc">Disponibile su BuiltByBit, la piattaforma di riferimento per i setup Minecraft di qualità. Prezzo su richiesta — contattami per un preventivo personalizzato.</p>
+          <div class="purchase-includes">
+            <span class="include-chip">Plugin Custom</span>
+            <span class="include-chip">Resource Pack</span>
+            <span class="include-chip">Documentazione</span>
+            <span class="include-chip">Supporto</span>
+            <span class="include-chip">Aggiornamenti</span>
+            <span class="include-chip">12 Effetti Augmented</span>
+          </div>
+        </div>
+        <div class="purchase-cta">
+          <div class="price-display">
+            <span class="price-label">Prezzo</span>
+            <span class="price-value">20 €</span>
+          </div>
+          <a href="https://builtbybit.com/members/caruvip" class="btn primary-btn">Visita BuiltByBit →</a>
+          <a href="contact.html" class="btn ghost-btn">Contattami</a>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>© <span id="year"></span> Christian Caruso</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Fade-up observer
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    // Mobile nav toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const links  = document.querySelector('.nav-links');
+    if (toggle) toggle.addEventListener('click', () => links.classList.toggle('open'));
+  </script>
+</body>
+</html>

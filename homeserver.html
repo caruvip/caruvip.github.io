@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeServer — Christian Tommaso Caruso</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050509;
+  --bg-alt: #0b0612;
+  --surface: rgba(15, 23, 42, 0.82);
+  --surface2: rgba(15, 23, 42, 0.6);
+  --border: rgba(148,163,184,0.18);
+  --border-glass: rgba(148,163,184,0.32);
+  --accent: #7c6fff;
+  --accent-blue: #3b82f6;
+  --accent-soft: rgba(124,111,255,0.18);
+  --accent2: #ff6b6b;
+  --accent3: #00d4aa;
+  --text: #f9fafb;
+  --muted: #9ca3af;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --shadow-soft: 0 24px 70px rgba(0,0,0,0.55);
+  --radius-xl: 24px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+  --transition-fast: 180ms ease-out;
+  --transition-med: 240ms ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(168,85,247,0.14), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(15,23,42,0.9), var(--bg));
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 6vw;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,111,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.1s forwards;
+}
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.2s forwards;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 480px;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.3s forwards;
+  line-height: 1.8;
+}
+.hero-meta {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.4s forwards;
+}
+.meta-pill {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 8px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+.meta-pill strong { color: var(--text); }
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 6vw;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--muted); letter-spacing: 0.15em;
+  animation: fadeUp 0.6s 0.8s forwards; opacity: 0;
+}
+
+/* SECTIONS */
+section {
+  padding: 6rem 6vw;
+  position: relative;
+  z-index: 1;
+}
+section + section { border-top: 1px solid var(--border); }
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 3rem;
+  line-height: 1.1;
+}
+
+/* HARDWARE */
+.hw-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.hw-cell {
+  background: var(--surface);
+  padding: 1.5rem;
+  transition: background 0.2s;
+}
+.hw-cell:hover { background: var(--surface2); }
+.hw-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.hw-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.hw-sub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* STATUS BAR */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent3); display: inline-block; margin-right: 6px; box-shadow: 0 0 6px var(--accent3); }
+.status-item { color: var(--muted); }
+.status-item strong { color: var(--text); }
+
+/* APPS GRID */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.app-card {
+  background: var(--surface);
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+  cursor: default;
+}
+.app-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent, var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.app-card:hover::before { transform: scaleX(1); }
+.app-card:hover { background: var(--surface2); }
+.app-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.app-name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: var(--text);
+}
+.app-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--card-accent, var(--accent));
+  margin-bottom: 0.75rem;
+}
+.app-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.app-port {
+  position: absolute; bottom: 1rem; right: 1.25rem;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--border);
+  transition: color 0.2s;
+}
+.app-card:hover .app-port { color: var(--muted); }
+
+/* BOTS */
+.bots-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.bot-card {
+  background: var(--surface);
+  padding: 1.5rem;
+  transition: background 0.2s;
+}
+.bot-card:hover { background: var(--surface2); }
+.bot-name { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
+.bot-desc { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+
+/* NETWORK */
+.net-diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 2;
+  margin-bottom: 2rem;
+}
+.net-diagram .node { color: var(--accent3); font-weight: 700; }
+.net-diagram .vpn { color: var(--accent); }
+.net-diagram .arrow { color: var(--border); }
+
+/* NARRATIVE */
+.narrative {
+  max-width: 680px;
+}
+.narrative p {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+.narrative p strong { color: var(--text); }
+.narrative blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  line-height: 1.8;
+}
+
+/* SKILLS LEARNED */
+.skills-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.skill-item {
+  background: var(--surface);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: background 0.2s;
+}
+.skill-item:hover { background: var(--surface2); }
+.skill-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  min-width: 24px;
+  margin-top: 3px;
+}
+.skill-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+.skill-text span { display: block; font-size: 11px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 3rem 6vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-left { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.8; }
+.footer-right {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.8;
+}
+.footer-right strong { color: var(--accent3); }
+
+/* DIVIDER */
+.divider {
+  width: 40px; height: 1px;
+  background: var(--accent);
+  margin-bottom: 3rem;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* PRINT */
+@media print {
+  body { background: white; color: black; }
+  .hero { min-height: auto; padding: 2rem; }
+  .hero h1 { font-size: 3rem; }
+}
+
+/* ── GLASS HELPERS (dal secondo CSS) ─────────────────── */
+.glass {
+  border-radius: var(--radius-xl);
+  background: rgba(15,23,42,0.82);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+.glass-soft {
+  border-radius: var(--radius-lg);
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.28);
+  backdrop-filter: blur(14px);
+}
+
+/* ── NAVBAR ───────────────────────────────────────────── */
+.nav-shell {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(22px);
+  background: linear-gradient(to bottom, rgba(5,5,9,0.92), rgba(5,5,9,0.6), transparent);
+  border-bottom: 1px solid var(--border);
+}
+.nav {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.9rem 6vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.nav-logo::before {
+  content: '';
+  display: inline-block;
+  width: 22px; height: 22px;
+  border-radius: 8px;
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.3), transparent 60%),
+              linear-gradient(135deg, var(--accent), #3b82f6);
+  box-shadow: 0 0 18px rgba(124,111,255,0.6);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-link {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-pill);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.nav-link:hover {
+  background: rgba(148,163,184,0.12);
+  color: var(--text);
+}
+
+/* ── PILL / TAG migliorati ───────────────────────────── */
+.meta-pill {
+  border: 1px solid var(--border-glass) !important;
+  border-radius: var(--radius-pill) !important;
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(10px);
+}
+
+/* ── APP CARD glass ──────────────────────────────────── */
+.app-card {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-glass) !important;
+  background: rgba(15,23,42,0.7) !important;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.app-card:hover {
+  background: rgba(15,23,42,0.88) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+}
+.apps-grid {
+  gap: 1rem !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* ── HW GRID glass ───────────────────────────────────── */
+.hw-grid {
+  gap: 1rem !important;
+  background: transparent !important;
+  border: none !important;
+}
+.hw-cell {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-glass) !important;
+  background: rgba(15,23,42,0.7) !important;
+  backdrop-filter: blur(14px);
+}
+.hw-cell:hover {
+  background: rgba(15,23,42,0.9) !important;
+}
+
+/* ── BOT CARDS glass ─────────────────────────────────── */
+.bots-row {
+  gap: 1rem !important;
+  background: transparent !important;
+  border: none !important;
+}
+.bot-card {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-glass) !important;
+  background: rgba(15,23,42,0.7) !important;
+  backdrop-filter: blur(14px);
+}
+.bot-card:hover {
+  background: rgba(15,23,42,0.9) !important;
+}
+
+/* ── SKILLS LIST glass ───────────────────────────────── */
+.skills-list {
+  gap: 1rem !important;
+  background: transparent !important;
+  border: none !important;
+}
+.skill-item {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-glass) !important;
+  background: rgba(15,23,42,0.7) !important;
+  backdrop-filter: blur(14px);
+}
+.skill-item:hover {
+  background: rgba(15,23,42,0.9) !important;
+}
+
+/* ── STATUS BAR glass ────────────────────────────────── */
+.status-bar {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-glass) !important;
+  background: rgba(15,23,42,0.7) !important;
+  backdrop-filter: blur(14px);
+}
+
+/* ── FOOTER migliorato ───────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border-glass) !important;
+  background: rgba(5,5,9,0.85);
+  backdrop-filter: blur(14px);
+}
+
+/* ── BLOCKQUOTE migliorato ───────────────────────────── */
+.narrative blockquote {
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: rgba(124,111,255,0.07);
+  padding: 1.25rem 1.5rem !important;
+  backdrop-filter: blur(8px);
+}
+
+/* ── SECTION separators soft ─────────────────────────── */
+section + section {
+  border-top: 1px solid rgba(148,163,184,0.1) !important;
+}
+
+/* ── NET DIAGRAM glass ───────────────────────────────── */
+.net-diagram {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--border-glass) !important;
+  background: rgba(15,23,42,0.7) !important;
+  backdrop-filter: blur(14px);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+  .apps-grid { grid-template-columns: 1fr !important; }
+  .bots-row { grid-template-columns: 1fr !important; }
+  .hw-grid { grid-template-columns: 1fr 1fr !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="nav-shell">
+  <nav class="nav">
+    <a href="#" class="nav-logo">HomeServer</a>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Hardware</a>
+      <a href="#" class="nav-link">Servizi</a>
+      <a href="#" class="nav-link">Automazione</a>
+      <a href="#" class="nav-link">Custom</a>
+      <a href="#" class="nav-link">Roadmap</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">// Piattaforma Unica — A.S. 2025/2026 — 5^INF3</div>
+  <h1>HOME<br><span>SERVER</span><br>PROJECT</h1>
+  <p class="hero-sub">
+    Christian Tommaso Caruso<br>
+    Un PC di recupero trasformato in infrastruttura personale.<br>
+    Hosting autonomo, privacy, automazione.
+  </p>
+  <div class="hero-meta">
+    <div class="meta-pill"><strong>Ubuntu</strong> 24.04.3 LTS</div>
+    <div class="meta-pill"><strong>Docker</strong> 28.5.2</div>
+    <div class="meta-pill"><strong>CasaOS</strong> Dashboard</div>
+    <div class="meta-pill"><strong>11</strong> container attivi</div>
+    <div class="meta-pill"><strong>Tailscale</strong> VPN mesh</div>
+  </div>
+  <div class="scroll-hint">&#x2193; scroll per esplorare</div>
+</section>
+
+<!-- MOTIVAZIONE -->
+<section>
+  <div class="section-label">// 01 — Origine del progetto</div>
+  <h2 class="section-title">Perché<br>un homeserver?</h2>
+  <div class="divider"></div>
+  <div class="narrative reveal">
+    <p>
+      Tutto è partito da una domanda semplice: <strong>quanti servizi uso ogni giorno che potrebbero girare su hardware mio?</strong> Spotify, Google Foto, Nextcloud, server di gioco — ogni abbonamento è denaro che esce e dati che non controllo. Con un vecchio PC da recupero, ho deciso di smettere di pagare per quello che potevo ospitare io.
+    </p>
+    <p>
+      Ma il progetto è diventato qualcosa di più grande. Costruire un homeserver significa <strong>toccare con mano tutto quello che a scuola studiamo in astratto</strong>: reti, servizi, virtualizzazione, sicurezza, automazione. Ogni problema incontrato — un container che non parte, una porta bloccata, un certificato scaduto — è stato un esercizio reale di troubleshooting.
+    </p>
+    <blockquote>
+      "Ho imparato più configurando WireGuard in un pomeriggio<br>
+      che in settimane di teoria sulle VPN."
+    </blockquote>
+    <p>
+      Il risultato è un'infrastruttura sempre attiva, accessibile ovunque tramite VPN, che ospita oltre <strong>11 servizi</strong> tra media, backup, AI locale, automazione e gaming — tutto su hardware di recupero da meno di 50€.
+    </p>
+  </div>
+</section>
+
+<!-- HARDWARE -->
+<section>
+  <div class="section-label">// 02 — Hardware</div>
+  <h2 class="section-title">Il ferro</h2>
+  <div class="divider"></div>
+  <div class="status-bar reveal">
+    <span><span class="status-dot"></span>Sistema operativo</span>
+    <span class="status-item">hostname: <strong>homeserver</strong></span>
+    <span class="status-item">uptime rilevato: <strong>14h 50m</strong></span>
+    <span class="status-item">kernel: <strong>6.17.0-23-generic</strong></span>
+    <span class="status-item">rilevazione: <strong>06 mag 2026, 09:06</strong></span>
+  </div>
+  <div class="hw-grid reveal">
+    <div class="hw-cell">
+      <div class="hw-label">CPU</div>
+      <div class="hw-value">Intel Core i3-6100</div>
+      <div class="hw-sub">3.70 GHz — 4 thread</div>
+    </div>
+    <div class="hw-cell">
+      <div class="hw-label">RAM</div>
+      <div class="hw-value">15 GB DDR4</div>
+      <div class="hw-sub">2.4 GB in uso (16%)</div>
+    </div>
+    <div class="hw-cell">
+      <div class="hw-label">Storage</div>
+      <div class="hw-value">234 GB SSD</div>
+      <div class="hw-sub">93 GB usati — 42%</div>
+    </div>
+    <div class="hw-cell">
+      <div class="hw-label">OS</div>
+      <div class="hw-value">Ubuntu 24.04.3</div>
+      <div class="hw-sub">LTS — headless</div>
+    </div>
+    <div class="hw-cell">
+      <div class="hw-label">Rete locale</div>
+      <div class="hw-value">192.168.1.140</div>
+      <div class="hw-sub">Wi-Fi — wlp2s0</div>
+    </div>
+    <div class="hw-cell">
+      <div class="hw-label">Consumo</div>
+      <div class="hw-value">2.1W idle</div>
+      <div class="hw-sub">29°C CPU — silenzioso</div>
+    </div>
+  </div>
+  <div class="narrative reveal">
+    <p>
+      Hardware di recupero, costo quasi zero. L'i3-6100 è una CPU del 2016 ma <strong>più che sufficiente per eseguire contemporaneamente 11 container Docker</strong> con un utilizzo medio del 10% e soli 2.4 GB di RAM occupata su 15 disponibili. La scelta di Ubuntu Server headless (senza interfaccia grafica) massimizza le risorse disponibili per i servizi.
+    </p>
+  </div>
+</section>
+
+<!-- SOFTWARE -->
+<section>
+  <div class="section-label">// 03 — Software & Servizi</div>
+  <h2 class="section-title">I servizi<br>in esecuzione</h2>
+  <div class="divider"></div>
+  <div class="apps-grid reveal">
+    <div class="app-card" style="--card-accent:#00d4aa">
+      <div class="app-icon">🎬</div>
+      <div class="app-name">Jellyfin</div>
+      <div class="app-tag">Media Server</div>
+      <div class="app-desc">Server multimediale open source per streaming di film, serie e musica. Alternativa self-hosted a Netflix/Plex, senza abbonamenti e senza raccolta dati.</div>
+      <div class="app-port">:8096</div>
+    </div>
+    <div class="app-card" style="--card-accent:#7c6fff">
+      <div class="app-icon">🎵</div>
+      <div class="app-name">Navidrome</div>
+      <div class="app-tag">Music Streaming</div>
+      <div class="app-desc">Server musicale compatibile con Subsonic API. Permette di ascoltare la propria libreria musicale da qualsiasi dispositivo, inclusi client mobile come DSub.</div>
+      <div class="app-port">:4533</div>
+    </div>
+    <div class="app-card" style="--card-accent:#ff9f43">
+      <div class="app-icon">🎶</div>
+      <div class="app-name">Swing Music</div>
+      <div class="app-tag">Music Player</div>
+      <div class="app-desc">Player musicale con interfaccia moderna e elegante. Ottimizzato per la navigazione per album e artisti, con integrazione Last.fm per lo scrobbling.</div>
+      <div class="app-port">:1970</div>
+    </div>
+    <div class="app-card" style="--card-accent:#ff6b9d">
+      <div class="app-icon">📸</div>
+      <div class="app-name">Immich</div>
+      <div class="app-tag">Foto & Backup</div>
+      <div class="app-desc">Backup automatico di foto e video dallo smartphone, con AI per il riconoscimento facciale e la ricerca semantica. Google Foto, ma sui propri dischi.</div>
+      <div class="app-port">:2283</div>
+    </div>
+    <div class="app-card" style="--card-accent:#00d4aa">
+      <div class="app-icon">⛏️</div>
+      <div class="app-name">Crafty Controller</div>
+      <div class="app-tag">Game Server</div>
+      <div class="app-desc">Pannello web per la gestione di server Minecraft. Permette di avviare, fermare e configurare istanze di gioco con console integrata e gestione utenti.</div>
+      <div class="app-port">:8443</div>
+    </div>
+    <div class="app-card" style="--card-accent:#7c6fff">
+      <div class="app-icon">🔐</div>
+      <div class="app-name">WireGuard (wg-easy)</div>
+      <div class="app-tag">VPN Server</div>
+      <div class="app-desc">VPN moderna e performante con pannello web di gestione. Permette accesso sicuro a tutti i servizi dall'esterno della rete locale, con crittografia end-to-end.</div>
+      <div class="app-port">:51821</div>
+    </div>
+    <div class="app-card" style="--card-accent:#00d4aa">
+      <div class="app-icon">🌐</div>
+      <div class="app-name">Tailscale</div>
+      <div class="app-tag">Mesh VPN</div>
+      <div class="app-desc">VPN mesh basata su WireGuard. Assegna un IP fisso (100.101.71.76) accessibile ovunque senza aprire porte sul router. Ideale per accesso mobile sicuro.</div>
+      <div class="app-port">mesh</div>
+    </div>
+    <div class="app-card" style="--card-accent:#ff6b6b">
+      <div class="app-icon">📚</div>
+      <div class="app-name">Kiwix Server</div>
+      <div class="app-tag">Offline Knowledge</div>
+      <div class="app-desc">Server per la navigazione offline di Wikipedia, Stack Overflow e altri siti di documentazione. Utile in ambienti con connessione limitata o per studio offline.</div>
+      <div class="app-port">:8080</div>
+    </div>
+    <div class="app-card" style="--card-accent:#ff9f43">
+      <div class="app-icon">🖥️</div>
+      <div class="app-name">ttydBridge</div>
+      <div class="app-tag">Terminal Web</div>
+      <div class="app-desc">Terminale Linux accessibile via browser. Permette di gestire il server da qualsiasi dispositivo senza client SSH, utile per interventi rapidi da mobile.</div>
+      <div class="app-port">:7070</div>
+    </div>
+    <div class="app-card" style="--card-accent:#7c6fff">
+      <div class="app-icon">🏠</div>
+      <div class="app-name">CasaOS</div>
+      <div class="app-tag">Dashboard</div>
+      <div class="app-desc">Interfaccia grafica per la gestione del homeserver. Offre app store integrato, monitoraggio risorse in tempo reale e gestione dei container Docker con un clic.</div>
+      <div class="app-port">:80</div>
+    </div>
+    <div class="app-card" style="--card-accent:#00d4aa">
+      <div class="app-icon">🤖</div>
+      <div class="app-name">Ollama</div>
+      <div class="app-tag">AI Locale</div>
+      <div class="app-desc">Runtime per modelli LLM in locale. Permette di eseguire modelli AI come LLaMA o Mistral direttamente sul server, senza inviare dati a servizi cloud esterni.</div>
+      <div class="app-port">:11434</div>
+    </div>
+  </div>
+</section>
+
+<!-- BOT TELEGRAM -->
+<section>
+  <div class="section-label">// 04 — Automazione</div>
+  <h2 class="section-title">Bot Telegram<br>personalizzati</h2>
+  <div class="divider"></div>
+  <div class="narrative reveal">
+    <p>
+      Tra i progetti più originali del setup ci sono <strong>quattro bot Telegram sviluppati da zero</strong> e gestiti come servizi systemd sempre attivi. Ogni bot risolve un problema concreto della vita quotidiana, integrando API esterne con notifiche push comode e immediate sul telefono.
+    </p>
+  </div>
+  <div class="bots-row reveal">
+    <div class="bot-card">
+      <div class="bot-name">📅 Bot Calendario</div>
+      <div class="bot-desc">bot-calendario.service</div>
+      <p style="font-size:13px;color:var(--muted);margin-top:8px;">Notifiche e gestione eventi Google Calendar direttamente via Telegram. Promemoria automatici e creazione rapida di eventi.</p>
+    </div>
+    <div class="bot-card">
+      <div class="bot-name">📧 Bot Email</div>
+      <div class="bot-desc">bot-email.service</div>
+      <p style="font-size:13px;color:var(--muted);margin-top:8px;">Ricezione e invio email da Telegram. Riassunto automatico della posta in arrivo, filtro spam e risposta rapida senza aprire il client.</p>
+    </div>
+    <div class="bot-card">
+      <div class="bot-name">💰 Bot Finanze</div>
+      <div class="bot-desc">bot-finanze.service</div>
+      <p style="font-size:13px;color:var(--muted);margin-top:8px;">Tracciamento spese personali e budget. Registrazione rapida via messaggio, report mensili automatici e grafici di spesa.</p>
+    </div>
+    <div class="bot-card">
+      <div class="bot-name">📊 Bot Sheets</div>
+      <div class="bot-desc">bot-sheets.service</div>
+      <p style="font-size:13px;color:var(--muted);margin-top:8px;">Interfaccia Telegram per Google Sheets. Lettura e scrittura di dati nei fogli di calcolo direttamente da chat, senza aprire il browser.</p>
+    </div>
+    <div class="bot-card">
+      <div class="bot-name">⚙️ Bot Server</div>
+      <div class="bot-desc">bot-server.service</div>
+      <p style="font-size:13px;color:var(--muted);margin-top:8px;">Gestione universale del server da Telegram. Monitoraggio risorse, riavvio servizi, backup automatici e log diagnostici in tempo reale.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ISPIRAZIONE -->
+<section>
+  <div class="section-label">// 06 — Ispirazione e benchmark</div>
+  <h2 class="section-title">Confronto con<br>altri homelab</h2>
+  <div class="divider"></div>
+  <div class="narrative reveal">
+    <p>
+      La rappresentazione visiva del mio homelab è stata creata utilizzando il modello 3D <strong>"Labrax"</strong>, una piattaforma di visualizzazione modulare progettata per infrastrutture domestiche. Ho personalizzato il modello per rispecchiare fedelmente la configurazione attuale del mio setup, includendo <strong>lo chassis compatto del PC recuperato, gli stack di storage, il posizionamento dei cavi di rete e la disposizione ottimizzata per la dissipazione termica</strong>.
+    </p>
+    <p>
+      Il modello mostra la <strong>disposizione fisica dei componenti</strong>: il processore Intel i3-6100 al centro del caso, circondato da moduli RAM DDR4 e dal SSD da 234GB. Sono visibili anche gli adapter di rete Ethernet e Wi-Fi, il connettore Tailscale virtualizzato, e i punti di collegamento fisico per i sensori di temperatura e il monitoraggio dei consumi. La configurazione è pensata per <strong>minimizzare il cablaggio, ottimizzare il flusso d'aria e rendere facilmente accessibili tutti i componenti per manutenzione</strong>.
+    </p>
+    <img src="https://www.the-diy-life.com/wp-content/uploads/2025/09/Completed-Pi-NAS-Rack-Build-1024x628.jpeg" alt="Homelab Personalizzato - Modello Labrax" style="width:100%;max-width:800px;margin:2rem 0;border:1px solid var(--border);border-radius:2px;">
+    <p style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:1rem;">
+      Modello 3D Labrax customizzato | Configurazione: Intel i3-6100 + 15GB RAM + 234GB SSD | Cooling passivo + layout ottimizzato | Dissipazione 2.1W idle
+    </p>
+    <h3 style="color:var(--text);margin-top:2rem;font-size:1.2rem;margin-bottom:0.5rem;">🔍 Caratteristiche della customizzazione:</h3>
+    <ul style="color:var(--text);margin-left:1.5rem;line-height:1.8;">
+      <li><strong>Chassis ottimizzato:</strong> Il modello Labrax è stato configurato per contenere un i3-6100 con dissipatore a torre passivo, mantenendo dimensioni compatte (~30cm x 20cm x 15cm) e un flusso d'aria naturale senza ventole.</li>
+      <li><strong>Gestione termica:</strong> Layout specifico per massimizzare la circolazione d'aria attorno al dissipatore CPU. I sensori di temperatura posizionati strategicamente monitorano continuamente i 29°C idle riportati dal sistema.</li>
+      <li><strong>Cablaggio ordinato:</strong> Passaggi dedicati per i cavi di rete, alimentazione e dati. Sistema di gestione dei cavi integrato che permette di aggiungere o rimuovere componenti senza smontare completamente la struttura.</li>
+      <li><strong>Espandibilità:</strong> Slot predisposti per aggiungere ulteriori SSD, moduli RAM o schede di rete in futuro. Supporti modulari per ospitare un Raspberry Pi 4/5 dedicato alla domotica (roadmap futura).</li>
+    </ul>
+    <h3 style="color:var(--text);margin-top:1.5rem;font-size:1.2rem;margin-bottom:0.5rem;">⚡ Dettagli di configurazione hardware:</h3>
+    <ul style="color:var(--text);margin-left:1.5rem;line-height:1.8;">
+      <li><strong>Alimentazione:</strong> PSU da 180W (sovradimensionata intenzionalmente per garantire stabilità). UPS integrata non implementata ma predisposta per futura installazione.</li>
+      <li><strong>Accesso fisico:</strong> Panel frontale con LED di stato (Power, Attività HDD, Network). Pannello posteriore con porte USB 3.0, Ethernet RJ45 e ingresso PSU organizzati secondo standard server.</li>
+      <li><strong>Vibrazione e rumore:</strong> Supporti antivibranti sotto il case. Dissipatore passivo a zero RPM garantisce silenziosità totale — operativo anche in ambienti di studio senza fastidi acustici.</li>
+      <li><strong>Posizionamento fisico:</strong> Pensato per essere posizionato verticalmente su uno scaffale, con ventilazione da basso verso alto. Footprint ridotto consente collocazione in ambienti ristretti (armadietto, scrivania, libreria).</li>
+    </ul>
+    <h3 style="color:var(--text);margin-top:1.5rem;font-size:1.2rem;margin-bottom:0.5rem;">🔧 Customizzazioni specifiche applicate:</h3>
+    <ul style="color:var(--text);margin-left:1.5rem;line-height:1.8;">
+      <li><strong>Etichettatura:</strong> Ogni connettore esterno ha un'etichetta personalizzata (LAN1, LAN2, USB3.0, ecc.) per identificazione rapida durante troubleshooting.</li>
+      <li><strong>Protezione:</strong> Filtri antipolvere sugli ingressi d'aria, coperture sulle porte USB non utilizzate per evitare contaminazione.</li>
+      <li><strong>Monitoraggio:</strong> Sensori di temperatura Dallas 1-Wire posizionati su CPU, HDD e intake dell'aria fredda. Sonda di corrente integrata per misurare i consumi in tempo reale (confermati i 2.1W idle).</li>
+      <li><strong>Certificazione estetica:</strong> Cablaggio internal color-coded per i diversi circuiti (rosso alimentazione, blu dati, giallo rete). Finitura esterna in alluminio opaco che abbina il tema dark del progetto.</li>
+    </ul>
+    <p style="margin-top:1.5rem;font-style:italic;color:var(--muted);">
+      In sostanza, il valore di questo progetto non risiede solo nell'hardware, ma nell'ecosistema coeso di software open source, sviluppo custom, e architettura di rete pensata per massimizzare privacy, efficienza e controllo totale sui dati personali.
+    </p>
+  </div>
+</section>
+
+<!-- APP CUSTOM -->
+<section>
+  <div class="section-label">// 07 — Sviluppo custom</div>
+  <h2 class="section-title">App sviluppate<br>da zero</h2>
+  <div class="divider"></div>
+  <div class="narrative reveal">
+    <p>
+      Accanto ai servizi open source, il homeserver ospita <strong>tre applicazioni sviluppate interamente da me in Python con Flask</strong>, accessibili via browser come qualsiasi altro servizio. Ogni app nasce da un bisogno reale: gestire i propri file senza dipendere da Google Drive, monitorare il server in tempo reale, e tenere traccia di clienti, ordini e guadagni in modo semplice e privato.
+    </p>
+  </div>
+
+  <!-- CLOUD -->
+  <div style="border:1px solid var(--border);margin-bottom:1px;" class="reveal">
+    <div style="display:grid;grid-template-columns:1fr 2fr;background:var(--surface);">
+      <div style="padding:2rem 2rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div style="font-size:2.5rem;margin-bottom:1rem;">☁️</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--accent3);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;">Cloud personale</div>
+          <div style="font-size:1.4rem;font-weight:800;margin-bottom:0.5rem;">Personal Cloud</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--muted);">Python · Flask · SQLite</div>
+        </div>
+        <div style="margin-top:1.5rem;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px;">stack</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent3);">Flask</span>
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent3);">SQLite</span>
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent3);">systemd</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:2rem;">
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:1.5rem;">
+          Alternativa self-hosted a Google Drive e Dropbox. Permette di <strong style="color:var(--text);">caricare, organizzare e condividere qualsiasi tipo di file</strong> direttamente dal homeserver, senza limiti di spazio imposti da terze parti e senza che i dati escano dalla rete di casa.
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);">
+          <div style="background:var(--surface2);padding:1rem;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px;">FUNZIONALITÀ</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.7;">Upload drag&drop<br>Cartelle e tag<br>Preview file<br>Link di condivisione</div>
+          </div>
+          <div style="background:var(--surface2);padding:1rem;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px;">TIPI FILE</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.7;">Documenti PDF<br>Immagini & video<br>Archivi ZIP<br>File di codice</div>
+          </div>
+          <div style="background:var(--surface2);padding:1rem;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px;">ACCESSO</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.7;">Web browser<br>Auth con login<br>Via Tailscale<br>Da qualsiasi device</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GESTIONALE HOMESERVER -->
+  <div style="border:1px solid var(--border);margin-bottom:1px;" class="reveal">
+    <div style="display:grid;grid-template-columns:1fr 2fr;background:var(--surface);">
+      <div style="padding:2rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div style="font-size:2.5rem;margin-bottom:1rem;">🖥️</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;">Monitoring</div>
+          <div style="font-size:1.4rem;font-weight:800;margin-bottom:0.5rem;">Gestionale HomeServer</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--muted);">Python · Flask · psutil · Chart.js</div>
+        </div>
+        <div style="margin-top:1.5rem;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px;">stack</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent);">Flask</span>
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent);">psutil</span>
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent);">Chart.js</span>
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent);">Docker SDK</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:2rem;">
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:1.5rem;">
+          Dashboard di monitoraggio sviluppata su misura. Visualizza in tempo reale <strong style="color:var(--text);">CPU, RAM, temperatura, consumo energetico, spazio disco e stato dei container Docker</strong>. Più dettagliata di CasaOS per i parametri che mi interessano davvero, con grafici storici e alerting.
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);">
+          <div style="background:var(--surface2);padding:1rem;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;">PARAMETRI MONITORATI</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.9;">
+              CPU % per core · frequenza<br>
+              RAM usata / disponibile<br>
+              Temperatura CPU (lm-sensors)<br>
+              Consumo watt stimato<br>
+              Disco I/O e spazio per partizione<br>
+              Banda di rete in/out
+            </div>
+          </div>
+          <div style="background:var(--surface2);padding:1rem;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;">GESTIONE CONTAINER</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.9;">
+              Lista container con stato<br>
+              Avvio / stop / restart<br>
+              Log in tempo reale<br>
+              Uptime per servizio<br>
+              Alert su crash automatici<br>
+              Grafici storici 24h / 7gg
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GESTIONALE BUSINESS -->
+  <div style="border:1px solid var(--border);" class="reveal">
+    <div style="display:grid;grid-template-columns:1fr 2fr;background:var(--surface);">
+      <div style="padding:2rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div style="font-size:2.5rem;margin-bottom:1rem;">📋</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--accent2);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;">ERP personale</div>
+          <div style="font-size:1.4rem;font-weight:800;margin-bottom:0.5rem;">Gestionale Business</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--muted);">Python · Flask · SQLite · ReportLab</div>
+        </div>
+        <div style="margin-top:1.5rem;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px;">stack</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent2);">Flask</span>
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent2);">SQLite</span>
+            <span style="background:var(--surface2);border:1px solid var(--border);padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--accent2);">ReportLab</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:2rem;">
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:1.5rem;">
+          Gestionale completo sviluppato per uso personale. Sostituisce fogli Excel e app di terze parti per <strong style="color:var(--text);">tenere traccia di clienti, ordini, prodotti, prezzi, preventivi, contratti, fornitori e guadagni</strong> — tutto in un'unica interfaccia web accessibile dal homeserver.
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);">
+          <div style="background:var(--surface2);padding:0.75rem;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--accent2);margin-bottom:6px;letter-spacing:0.1em;">CLIENTI</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.8;">Anagrafica<br>Storico ordini<br>Note e contatti<br>Fatturato cliente</div>
+          </div>
+          <div style="background:var(--surface2);padding:0.75rem;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--accent2);margin-bottom:6px;letter-spacing:0.1em;">ORDINI</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.8;">Creazione rapida<br>Stato avanzamento<br>Storico completo<br>Export PDF</div>
+          </div>
+          <div style="background:var(--surface2);padding:0.75rem;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--accent2);margin-bottom:6px;letter-spacing:0.1em;">PRODOTTI</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.8;">Catalogo & SKU<br>Listino prezzi<br>Disponibilità<br>Fornitori collegati</div>
+          </div>
+          <div style="background:var(--surface2);padding:0.75rem;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--accent2);margin-bottom:6px;letter-spacing:0.1em;">FINANZA</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.8;">Preventivi & PDF<br>Contratti<br>Guadagni / mese<br>Dashboard KPI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RIFLESSIONI -->
+<section>
+  <div class="section-label">// 08 — Competenze acquisite</div>
+  <h2 class="section-title">Cosa ho<br>imparato</h2>
+  <div class="divider"></div>
+  <div class="skills-list reveal">
+    <div class="skill-item">
+      <div class="skill-num">01</div>
+      <div class="skill-text">Amministrazione Linux
+        <span>Gestione servizi systemd, permessi, cron, log di sistema</span>
+      </div>
+    </div>
+    <div class="skill-item">
+      <div class="skill-num">02</div>
+      <div class="skill-text">Docker & containerizzazione
+        <span>docker-compose, network bridge, volume mount, aggiornamenti</span>
+      </div>
+    </div>
+    <div class="skill-item">
+      <div class="skill-num">03</div>
+      <div class="skill-text">Reti e VPN
+        <span>WireGuard, Tailscale, subnet, NAT, routing, porte TCP/UDP</span>
+      </div>
+    </div>
+    <div class="skill-item">
+      <div class="skill-num">04</div>
+      <div class="skill-text">Sviluppo bot Telegram
+        <span>Python, Telegram Bot API, Google APIs, autenticazione OAuth</span>
+      </div>
+    </div>
+    <div class="skill-item">
+      <div class="skill-num">05</div>
+      <div class="skill-text">Self-hosting & privacy
+        <span>Alternative open source a servizi cloud, gestione dati personali</span>
+      </div>
+    </div>
+    <div class="skill-item">
+      <div class="skill-num">06</div>
+      <div class="skill-text">Troubleshooting reale
+        <span>Debug di container, conflitti di porte, certificati, log analysis</span>
+      </div>
+    </div>
+    <div class="skill-item">
+      <div class="skill-num">07</div>
+      <div class="skill-text">AI locale con Ollama
+        <span>Deploy di LLM in locale, API REST, privacy-first AI</span>
+      </div>
+    </div>
+    <div class="skill-item">
+      <div class="skill-num">08</div>
+      <div class="skill-text">Sicurezza informatica pratica
+        <span>Hardening SSH, VPN mesh, isolamento container, accessi</span>
+      </div>
+    </div>
+  </div>
+  <div class="narrative reveal" style="margin-top:3rem;">
+    <p>
+      Questo progetto mi ha insegnato che <strong>l'informatica si impara facendo</strong>. Ogni errore — un container che crashava, una configurazione di rete sbagliata, un bot che smetteva di rispondere — mi ha costretto a capire davvero come funzionano le cose sotto, non solo in superficie. Il homeserver è diventato il mio laboratorio permanente, sempre acceso, sempre da migliorare.
+    </p>
+    <p>
+      La soddisfazione più grande? <strong>Avere tutto sotto controllo</strong>. Le mie foto non sono su Google, la mia musica non è su Spotify, i miei dati finanziari non passano da nessuna app di terze parti. È un piccolo server da pochi watt, ma è completamente mio.
+    </p>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section>
+  <div class="section-label">// 07 — Privacy & anonimato</div>
+  <h2 class="section-title">Invisibile<br>sul web</h2>
+  <div class="divider"></div>
+  <div class="narrative reveal">
+    <p>
+      Uno dei motivi fondanti del progetto è la <strong>sovranità digitale</strong>: smettere di essere il prodotto di piattaforme che tracciano ogni click, ogni ricerca, ogni abitudine. Il homeserver è il punto di partenza di una strategia di privacy a più livelli che copre rete, identità e dati.
+    </p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:2rem;" class="reveal">
+
+    <div style="background:var(--surface);padding:1.75rem;position:relative;overflow:hidden;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div style="font-size:1.6rem;margin-bottom:1rem;">🔐</div>
+      <div style="font-family:var(--mono);font-size:9px;color:#00d4aa;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">VPN mesh</div>
+      <div style="font-weight:700;margin-bottom:8px;">Tailscale + WireGuard</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">Tutto il traffico verso il homeserver passa da tunnel cifrati WireGuard. Nessuna porta esposta su internet, nessun IP pubblico visibile. Accesso solo da dispositivi autorizzati nella mesh privata.</div>
+    </div>
+
+    <div style="background:var(--surface);padding:1.75rem;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div style="font-size:1.6rem;margin-bottom:1rem;">🌐</div>
+      <div style="font-family:var(--mono);font-size:9px;color:#7c6fff;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">DNS & routing</div>
+      <div style="font-weight:700;margin-bottom:8px;">DNS privato + no-log</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">Utilizzo di resolver DNS cifrati (DoH/DoT) che non registrano le query. Nessun ISP può vedere i siti visitati. Configurazione custom per bloccare tracker e pubblicità a livello di rete.</div>
+    </div>
+
+    <div style="background:var(--surface);padding:1.75rem;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div style="font-size:1.6rem;margin-bottom:1rem;">📸</div>
+      <div style="font-family:var(--mono);font-size:9px;color:#ff6b6b;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">Dati personali</div>
+      <div style="font-weight:700;margin-bottom:8px;">Zero cloud di terze parti</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">Foto su Immich (non Google Foto), musica su Navidrome (non Spotify), file su Cloud personale (non Drive). Nessun dato biometrico, comportamentale o di consumo media ceduto a big tech.</div>
+    </div>
+
+    <div style="background:var(--surface);padding:1.75rem;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div style="font-size:1.6rem;margin-bottom:1rem;">🤖</div>
+      <div style="font-family:var(--mono);font-size:9px;color:#ff9f43;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">AI locale</div>
+      <div style="font-weight:700;margin-bottom:8px;">Ollama — nessun dato inviato</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">I modelli LLM girano localmente tramite Ollama. Le query all'AI — anche le più sensibili — non lasciano mai la rete locale. Zero telemetria, zero profilazione, zero abbonamenti.</div>
+    </div>
+
+    <div style="background:var(--surface);padding:1.75rem;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div style="font-size:1.6rem;margin-bottom:1rem;">🔑</div>
+      <div style="font-family:var(--mono);font-size:9px;color:#00d4aa;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">Accesso sicuro</div>
+      <div style="font-weight:700;margin-bottom:8px;">SSH key-only + 2FA</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">Accesso SSH solo via chiave crittografica, password disabilitata. Autenticazione a due fattori sui servizi critici. Fail2ban attivo per bloccare tentativi di brute force automatici.</div>
+    </div>
+
+    <div style="background:var(--surface);padding:1.75rem;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div style="font-size:1.6rem;margin-bottom:1rem;">📚</div>
+      <div style="font-family:var(--mono);font-size:9px;color:#7c6fff;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">Conoscenza offline</div>
+      <div style="font-weight:700;margin-bottom:8px;">Kiwix — Wikipedia locale</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">Wikipedia, Stack Overflow e documentazione tecnica disponibili offline tramite Kiwix. Nessuna traccia delle ricerche sui server di terze parti, accesso immediato senza internet.</div>
+    </div>
+
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid #00d4aa;padding:1.5rem 2rem;font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.9;" class="reveal">
+    <span style="color:#00d4aa;font-weight:700;">// filosofia</span><br>
+    La privacy non è qualcosa da nascondere. È il diritto di decidere<br>
+    chi sa cosa di te, quando e perché. Il homeserver è la risposta<br>
+    tecnica a questa esigenza: <span style="color:var(--text);">i miei dati restano miei.</span>
+  </div>
+</section>
+
+<!-- GAMING -->
+<section>
+  <div class="section-label">// 07b — Gaming</div>
+  <h2 class="section-title">Minecraft<br>in compagnia</h2>
+  <div class="divider"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:2rem;" class="reveal">
+    <div style="background:var(--surface);padding:2rem;">
+      <div style="font-size:2rem;margin-bottom:1rem;">⛏️</div>
+      <div style="font-family:var(--mono);font-size:10px;color:#00d4aa;letter-spacing:0.2em;margin-bottom:8px;">CRAFTY CONTROLLER</div>
+      <div style="font-weight:700;font-size:1.1rem;margin-bottom:1rem;">Server Minecraft dedicato</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.8;">
+        Il homeserver ospita un server Minecraft gestito tramite <strong style="color:var(--text);">Crafty Controller</strong>, pannello web che permette di avviare, fermare, configurare e monitorare il server di gioco in tempo reale. Io e i miei amici giochiamo insieme in sessioni multiplayer stabili e sempre disponibili — senza pagare hosting dedicato.
+      </p>
+    </div>
+    <div style="background:var(--surface2);padding:2rem;display:flex;flex-direction:column;gap:1rem;">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.15em;margin-bottom:4px;">DETTAGLI TECNICI</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:8px;">
+          <span style="font-size:12px;color:var(--muted);">Container</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text);">crafty-container</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:8px;">
+          <span style="font-size:12px;color:var(--muted);">Gestione</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text);">Crafty Controller 4</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:8px;">
+          <span style="font-size:12px;color:var(--muted);">Accesso amici</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--accent3);">via IP pubblico / VPN</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:8px;">
+          <span style="font-size:12px;color:var(--muted);">CPU in idle</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--accent3);">~0.1% (misura reale)</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:8px;">
+          <span style="font-size:12px;color:var(--muted);">Uptime sessione</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--accent3);">15+ ore continuative</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:var(--muted);">Performance</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--accent3);">stabile — lag zero</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="narrative reveal">
+    <p>Il server gira <strong>in parallelo a tutti gli altri servizi</strong> senza degrado delle prestazioni — merito dell'isolamento Docker e della RAM abbondante (13 GB liberi anche con tutto attivo). Un caso pratico di come la containerizzazione permette di ottimizzare le risorse su hardware modesto.</p>
+  </div>
+</section>
+
+<!-- FUTURE -->
+<section>
+  <div class="section-label">// 07c — Roadmap futura</div>
+  <h2 class="section-title">Dove voglio<br>arrivare</h2>
+  <div class="divider"></div>
+  <div class="narrative reveal">
+    <p>Il homeserver non è un progetto finito — è una piattaforma in continua evoluzione. Questi sono i prossimi step pianificati, dal più immediato al più ambizioso.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:2rem;" class="reveal">
+
+    <div style="background:var(--surface);padding:1.5rem 2rem;display:grid;grid-template-columns:120px 1fr;gap:2rem;align-items:start;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:#00d4aa;letter-spacing:0.15em;margin-bottom:4px;">PROSSIMO</div>
+        <div style="font-size:1.4rem;">🤖</div>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:6px;">AI personale vocale con monitoring integrato</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">L'idea è integrare Ollama con un sistema di <strong style="color:var(--text);">voice assistant locale</strong> (Whisper per STT + TTS sintetico) che monitora costantemente lo stato del server e risponde a domande vocali: "Quanta RAM sta usando Jellyfin?", "C'è qualche container down?", "Che tempo fa?". Tutto gira in locale, zero cloud, zero abbonamenti. L'AI ha accesso alle metriche di sistema via API interna e può anche fare ricerche via Kiwix o web scraping locale.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);padding:1.5rem 2rem;display:grid;grid-template-columns:120px 1fr;gap:2rem;align-items:start;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:#7c6fff;letter-spacing:0.15em;margin-bottom:4px;">MEDIO TERMINE</div>
+        <div style="font-size:1.4rem;">💾</div>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:6px;">Full NAS con RAID — storage espanso</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">Aggiunta di un array di dischi rigidi in configurazione <strong style="color:var(--text);">RAID 1 o RAID 5</strong> per storage sicuro e ridondante. Backup automatico di tutti i container, delle foto Immich e dei file personali. L'obiettivo è avere storage multi-TB con protezione hardware contro la perdita di dati, usando <strong style="color:var(--text);">Samba / NFS</strong> per la condivisione sulla rete locale.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);padding:1.5rem 2rem;display:grid;grid-template-columns:120px 1fr;gap:2rem;align-items:start;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:#ff9f43;letter-spacing:0.15em;margin-bottom:4px;">MEDIO TERMINE</div>
+        <div style="font-size:1.4rem;">🍓</div>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:6px;">Raspberry Pi — domotica di casa</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">Un Raspberry Pi 4/5 dedicato alla <strong style="color:var(--text);">domotica con Home Assistant</strong>: controllo luci smart, sensori di temperatura e umidità, prese intelligenti, automazioni basate su orari e presenza. Il Pi comunica col homeserver principale tramite rete locale e Tailscale, condividendo dati e dashboard. Obiettivo: casa automatizzata senza abbonamenti a hub cloud proprietari.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);padding:1.5rem 2rem;display:grid;grid-template-columns:120px 1fr;gap:2rem;align-items:start;transition:background 0.2s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:#ff6b6b;letter-spacing:0.15em;margin-bottom:4px;">AMBIZIOSO</div>
+        <div style="font-size:1.4rem;">🌍</div>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:6px;">Nuove app Flask — ecosistema completo</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">Espansione dell'ecosistema di app custom: <strong style="color:var(--text);">password manager locale</strong> (alternativa a BitWarden), <strong style="color:var(--text);">aggregatore RSS</strong> per notizie senza algoritmi, <strong style="color:var(--text);">sistema di ticketing</strong> per i clienti del gestionale, e una <strong style="color:var(--text);">dashboard unificata</strong> che aggrega metriche da tutti i servizi in un'unica view. L'idea finale è un'infrastruttura personale completamente autosufficiente.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:1.5rem 2rem;font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.9;" class="reveal">
+    <span style="color:var(--accent);font-weight:700;">// obiettivo finale</span><br>
+    Un ecosistema domestico completamente autonomo: dati miei, AI mia,<br>
+    domotica mia, backup miei.
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong>Christian Tommaso Caruso</strong><br>
+    Classe 5^INF3 — Anno scolastico 2025/2026<br>
+    Relazione tecnica — Piattaforma Unica
+  </div>
+  <div class="footer-right">
+    hostname: <strong>homeserver</strong><br>
+    profile: <strong>caruvip.github.io</strong>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
