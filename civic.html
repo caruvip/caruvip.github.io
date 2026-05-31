@@ -962,6 +962,14 @@
 
   /* === EK CAR INTEGRATION === */
   .hero { position: relative; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+  }
+  .hero-left { min-width: 0; }
   .hero-car-wrap {
     position: relative;
     width: min(82vw, 720px);
@@ -970,6 +978,11 @@
     z-index: 5;
     opacity: 0;
     animation: fadeIn 1.4s 1.4s forwards, floaty 6s 2.4s ease-in-out infinite;
+  }
+  @media (min-width: 980px) {
+    .hero-grid { grid-template-columns: 1.05fr 0.95fr; gap: 3rem; }
+    .hero h1 { font-size: clamp(4rem, 9vw, 11rem); }
+    .hero-car-wrap { width: 100%; max-width: 640px; margin: 0; }
   }
   .hero-car {
     position: absolute; inset: 0;
@@ -1044,40 +1057,43 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-tag">// THE_DREAM_BUILD // EST. 2026</div>
-  <h1>
-    <span class="line"><span>HONDA</span></span>
-    <span class="line"><span class="red">CIVIC</span></span>
-    <span class="line"><span class="outline">JDM_PLAN</span></span>
-  </h1>
-  <p class="hero-sub">
-    Roadmap completa per trasformare una Civic 6ª serie in un progetto JDM serio. Step by step. Anno per anno. Tutto legale.
-  </p>
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-tag">// THE_DREAM_BUILD // EST. 2026</div>
+      <h1>
+        <span class="line"><span>HONDA</span></span>
+        <span class="line"><span class="red">CIVIC</span></span>
+        <span class="line"><span class="outline">JDM_PLAN</span></span>
+      </h1>
+      <p class="hero-sub">
+        Roadmap completa per trasformare una Civic 6ª serie in un progetto JDM serio. Step by step. Anno per anno. Tutto legale.
+      </p>
 
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-label">Base</div>
-      <div class="stat-value">EU7 / 2001</div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-label">Base</div>
+          <div class="stat-value">EJ9 / 2001</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Obiettivo</div>
+          <div class="stat-value">200+ CV</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Timeline</div>
+          <div class="stat-value">3 ANNI</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Budget</div>
+          <div class="stat-value">~9.000€</div>
+        </div>
+      </div>
     </div>
-    <div class="stat">
-      <div class="stat-label">Obiettivo</div>
-      <div class="stat-value">200+ CV</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Timeline</div>
-      <div class="stat-value">3 ANNI</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Budget</div>
-      <div class="stat-value">~9.000€</div>
+
+    <div class="hero-car-wrap">
+      <div class="hero-car-glow"></div>
+      <div class="hero-car"></div>
     </div>
   </div>
-
-  <div class="hero-car-wrap">
-    <div class="hero-car-glow"></div>
-    <div class="hero-car"></div>
-  </div>
-
 </section>
 
 <!-- MARQUEE -->
@@ -1305,7 +1321,7 @@
     </div>
     <div class="header-car-chip"></div>
     <p class="section-desc">
-      Le tre alternative serie per la EU7. Il K20A2 è la scelta tecnica giusta: è il motore della Civic Type R EP3, condivide la piattaforma con la tua macchina. B-series è leggenda ma swap difficile. K24 è la furbata economica.
+      Le tre alternative serie per la EK. Il K20A2 è la scelta tecnica giusta: è il motore della Civic Type R EP3, condivide la piattaforma con la tua macchina. B-series è leggenda ma swap difficile. K24 è la furbata economica.
     </p>
   </div>
 
@@ -1319,7 +1335,7 @@
       <div class="swap-spec"><span class="swap-spec-label">Giri max</span><span class="swap-spec-value">8.000 rpm</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Cilindrata</span><span class="swap-spec-value">1998 cc</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Tecnologia</span><span class="swap-spec-value">i-VTEC</span></div>
-      <div class="swap-spec"><span class="swap-spec-label">Swap su EU7</span><span class="swap-spec-value">FACILE</span></div>
+      <div class="swap-spec"><span class="swap-spec-label">Swap su EK</span><span class="swap-spec-value">FACILE</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Prezzo motore</span><span class="swap-spec-value">2.000-3.500€</span></div>
     </div>
 
@@ -1331,7 +1347,7 @@
       <div class="swap-spec"><span class="swap-spec-label">Giri max</span><span class="swap-spec-value">8.500 rpm</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Cilindrata</span><span class="swap-spec-value">1797 cc</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Tecnologia</span><span class="swap-spec-value">VTEC</span></div>
-      <div class="swap-spec"><span class="swap-spec-label">Swap su EU7</span><span class="swap-spec-value">DIFFICILE</span></div>
+      <div class="swap-spec"><span class="swap-spec-label">Swap su EK</span><span class="swap-spec-value">DIFFICILE</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Prezzo motore</span><span class="swap-spec-value">3.500-5.000€</span></div>
     </div>
 
@@ -1343,7 +1359,7 @@
       <div class="swap-spec"><span class="swap-spec-label">Giri max</span><span class="swap-spec-value">7.100 rpm</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Cilindrata</span><span class="swap-spec-value">2354 cc</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Tecnologia</span><span class="swap-spec-value">i-VTEC</span></div>
-      <div class="swap-spec"><span class="swap-spec-label">Swap su EU7</span><span class="swap-spec-value">MEDIO</span></div>
+      <div class="swap-spec"><span class="swap-spec-label">Swap su EK</span><span class="swap-spec-value">MEDIO</span></div>
       <div class="swap-spec"><span class="swap-spec-label">Prezzo motore</span><span class="swap-spec-value">800-1.500€</span></div>
     </div>
 
@@ -1502,6 +1518,178 @@
 
   <p class="cockpit-note">💡 Quasi tutto questo è <b>reversibile e legale</b>: strumentazione aggiuntiva, HUD OBD2 e audio non richiedono omologazione (basta non ostruire la visuale e rispettare i livelli sonori). La head unit va dichiarata solo se cambi le dimensioni del vano. Roba perfetta per la Fase 2, mentre sei ancora neopatentato e non puoi toccare il motore.</p>
 </section>
+
+<!-- BODYKIT (05) -->
+<style>
+  /* ===== 05 // VESTI LA BESTIA - bodykit shop (aggiunta) ===== */
+  .bodykit { padding: 6rem 2rem; position: relative; z-index: 10; }
+  .car-chip {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: var(--bg-soft);
+    padding: 1.1rem 1.3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.64rem; letter-spacing: 0.06em; line-height: 1.95;
+    color: var(--ink-dim); min-width: 250px;
+  }
+  .car-chip b { color: var(--ink); font-weight: 700; }
+  .car-chip .vin { color: var(--accent); }
+  .car-chip .ok { color: #00ff88; }
+  /* small car illustration beside the title */
+  .bk-head-car {
+    position: relative; aspect-ratio: 1053/533; align-self: center;
+  }
+  .bk-head .bk-head-car { width: 80%; max-width: 360px; margin-top: 1.8rem; }
+
+  .bk-head-car .car {
+    width: 100%; height: 100%;
+    background-image: var(--car);
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    filter: drop-shadow(0 18px 28px rgba(0,0,0,0.65)) drop-shadow(0 0 40px rgba(225,6,0,0.18));
+    animation: bk-float 5s ease-in-out infinite;
+  }
+  @keyframes bk-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .bk-head-car .cap {
+    position: absolute; bottom: -1.2rem; right: 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em;
+    color: var(--ink-dim);
+  }
+  .supplier-badge.match { color:#000; background:var(--accent); border-color:var(--accent); }
+  .supplier-badge.region { color:var(--cyan); border-color:rgba(0,229,255,0.35); }
+  .bodykit .supplier { display:flex; flex-direction:column; overflow:hidden; }
+  .bodykit .supplier::before {
+    content:''; position:absolute; left:0; top:0; width:3px; height:100%;
+    background:var(--red); transform:scaleY(0); transform-origin:top; transition:transform .35s ease;
+  }
+  .bodykit .supplier:hover { border-color:rgba(225,6,0,0.5); transform:translateY(-6px); }
+  .bodykit .supplier:hover::before { transform:scaleY(1); }
+  .bodykit .supplier-desc { flex-grow:1; }
+  .bodykit .supplier-tags { margin-bottom:1.4rem; }
+  .bodykit .supplier-tags span {
+    font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--ink-dim);
+    border:1px solid rgba(255,255,255,0.12); padding:0.3rem 0.55rem;
+  }
+  .supplier-link {
+    display:block; margin-top:auto;
+    font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700;
+    letter-spacing:0.1em; text-transform:uppercase; text-align:center;
+    color:var(--bg); background:var(--ink); padding:0.85rem 1rem;
+    text-decoration:none; transition:background .2s,color .2s,letter-spacing .2s;
+  }
+  .supplier-link:hover { background:var(--red); color:var(--ink); letter-spacing:0.16em; }
+  .bk-reveal { opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease; }
+  .bk-reveal.visible { opacity:1; transform:none; }
+</style>
+
+<section class="bodykit">
+  <div class="section-header bk-head bk-reveal">
+    <div>
+      <div class="section-num">05 // VESTI_LA_BESTIA</div>
+      <h2 class="section-title">BODYKIT<br>SHOP</h2>
+      <div class="bk-head-car">
+        <div class="car"></div>
+        <div class="cap">// CIVIC EK / EJ9 — 3 PORTE</div>
+      </div>
+    </div>
+    <div>
+      <p class="section-desc">
+        La meccanica è metà del lavoro. L’altra metà è la faccia che fa girare la testa al semaforo.
+        Qui i posti <b>veri</b> dove comprare paraurti, minigonne, lip e alettoni per la tua EK/EJ 3 porte.
+        Niente annunci a caso: solo shop verificati che spediscono in Italia.
+      </p>
+      <div class="car-chip" style="margin-top:1.5rem;">
+        TARGA &middot; <span class="vin">BR140ZZ</span><br>
+        <b>HONDA CIVIC 6A SERIE</b> (’95-’02)<br>
+        1.4I 16V CAT 3P &mdash; EJ9<br>
+        90 CV (66 KW) &middot; BENZINA &middot; EURO3<br>
+        IMM. MARZO 2001 &middot; BRESCIA<br>
+        LISTINO &euro;14.926 &middot; <span class="ok">REV. 135.819 KM OK</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="suppliers-grid">
+
+    <div class="supplier bk-reveal">
+      <div class="supplier-top">
+        <div class="supplier-name">Em-Power</div>
+        <div class="supplier-badge match">&#9733; MATCH ESATTO EJ9</div>
+      </div>
+      <div class="supplier-loc">&#128205; Italia &mdash; spedizione + assistenza WhatsApp</div>
+      <div class="supplier-piva">FIT: Civic 1995-2001 &middot; 3 porte &middot; 1.4i (EJ9) &#10003;</div>
+      <p class="supplier-desc">Shop italiano con una <b>collezione dedicata</b> alla Civic EK/EJ 96-00: lip Type-R, minigonne, prese d’aria e paraurti “look N1” plug-and-play in ABS. Spedizione tracciata in Italia. È il punto di partenza più comodo per te.</p>
+      <div class="supplier-tags"><span>Lip</span><span>Minigonne</span><span>Paraurti</span><span>Plug&amp;Play</span></div>
+      <a class="supplier-link" href="https://em-power.it/collections/accessori-tuning-per-esterno-auto-honda-civic-ek-ej-96-00" target="_blank" rel="noopener">Apri shop &rarr;</a>
+    </div>
+
+    <div class="supplier bk-reveal">
+      <div class="supplier-top">
+        <div class="supplier-name">AKR Performance</div>
+        <div class="supplier-badge region">NL &middot; OLANDA</div>
+      </div>
+      <div class="supplier-loc">&#128205; Paesi Bassi &mdash; spedizione in tutta Europa</div>
+      <div class="supplier-piva">FIT: Civic 3-door hatch 96-00 &middot; filtra 1.4i &#10003;</div>
+      <p class="supplier-desc">Specialista <b>solo Honda</b>, fa OEM e tuning. Esempio reale: paraurti anteriore look EK9 a circa <b>~104&euro; IVA inclusa</b>. Catalogo enorme e ricambi seri, niente robaccia.</p>
+      <div class="supplier-tags"><span>OEM-look</span><span>Paraurti</span><span>EU Shipping</span><span>IVA incl.</span></div>
+      <a class="supplier-link" href="https://www.akr-performance.com/parts/civic-3-door-hatchback/" target="_blank" rel="noopener">Apri shop &rarr;</a>
+    </div>
+
+    <div class="supplier bk-reveal">
+      <div class="supplier-top">
+        <div class="supplier-name">Classic EuroParts</div>
+        <div class="supplier-badge region">EU &middot; EUROPA</div>
+      </div>
+      <div class="supplier-loc">&#128205; Europa &mdash; corriere (oversize incluso)</div>
+      <div class="supplier-piva">FIT: EK 96-98 hatch/coupe/sedan &middot; solo pre-facelift</div>
+      <p class="supplier-desc">Forte sulle <b>conversioni paraurti SIR / Type-R</b> per le pre-facelift 96-98: kit paraurti completi con modanature in ABS. Spedizione dall’Europa, costo corriere già incluso nel prezzo.</p>
+      <div class="supplier-tags"><span>SIR Conv.</span><span>Kit completo</span><span>96-98</span></div>
+      <a class="supplier-link" href="https://www.classiceuroparts.com/product/honda-civic-ek-96-98-hatchback-coupe-sedan-sir-jdm-front-bumper-set-with-trim/" target="_blank" rel="noopener">Apri shop &rarr;</a>
+    </div>
+
+    <div class="supplier bk-reveal">
+      <div class="supplier-top">
+        <div class="supplier-name">Nengun</div>
+        <div class="supplier-badge region">JP &middot; GIAPPONE</div>
+      </div>
+      <div class="supplier-loc">&#128205; Giappone &mdash; spedizione mondiale</div>
+      <div class="supplier-piva">FIT: estetica EK9 Type-R genuina (condivisa)</div>
+      <p class="supplier-desc">Per chi vuole la <b>roba vera JDM</b>: ricambi estetici Honda genuini ed ex-EK9 (Mugen, Spoon autentici) direttamente dal Giappone. Costoso e con <b>dazi all’import</b>, ma è livello collezione, non replica.</p>
+      <div class="supplier-tags"><span>JDM genuino</span><span>Mugen</span><span>Spoon</span><span>Import</span></div>
+      <a class="supplier-link" href="https://www.nengun.com/honda/civic-type-r-ek9/exterior" target="_blank" rel="noopener">Apri shop &rarr;</a>
+    </div>
+
+    <div class="supplier bk-reveal">
+      <div class="supplier-top">
+        <div class="supplier-name">eBay IT</div>
+        <div class="supplier-badge region">WW &middot; MARKETPLACE</div>
+      </div>
+      <div class="supplier-loc">&#128205; cerca “Civic EK EJ9 96-00” + facelift/pre</div>
+      <div class="supplier-piva">FIT: variabile &middot; verifica annuncio per annuncio</div>
+      <p class="supplier-desc">Il bazar: lip Type-R / Mugen style in PP o PU da <b>poche decine di euro</b>, kit completi economici. Qualità altalenante: controlla sempre <b>recensioni venditore</b> e foto della vestibilità reale prima di comprare.</p>
+      <div class="supplier-tags"><span>Economico</span><span>Varietà</span><span>Replica</span><span>Verifica seller</span></div>
+      <a class="supplier-link" href="https://www.ebay.it/sch/i.html?_nkw=honda+civic+ek+ej9+body+kit" target="_blank" rel="noopener">Cerca su eBay &rarr;</a>
+    </div>
+
+  </div>
+
+  <div class="verify-box bk-reveal">
+    <div class="verify-title">PRIMA DI COMPRARE &mdash; CHECKLIST</div>
+    <div class="verify-grid">
+      <div class="verify-item"><span class="vn">01</span><b>Pre-facelift o facelift?</b> La tua è immatricolata 2001 &rarr; quasi sicuro <b>facelift 99-00</b>. Paraurti e fari cambiano tra le due serie: ordina il pezzo giusto guardando griglia e fari.</div>
+      <div class="verify-item"><span class="vn">02</span><b>Materiale.</b> PP/ABS = flessibile, perdona urti e montaggio. PU = rigido. La <b>vetroresina</b> è bella ma fragile e va lavorata. Per uso strada, ABS.</div>
+      <div class="verify-item"><span class="vn">03</span><b>Verniciatura.</b> Quasi tutti i kit arrivano <b>grezzi</b>. Aggiungi 150-400&euro; di carrozzeria per verniciare in tinta. Mettilo nel budget.</div>
+      <div class="verify-item"><span class="vn">04</span><b>Legalità / revisione.</b> Lip e minigonne di solito ok; paraurti e alettoni grossi possono richiedere <b>omologazione</b> o annotazione sulla carta. Chiedi in carrozzeria a Brescia prima della prossima revisione.</div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.12});
+  document.querySelectorAll('.bk-reveal').forEach(function(el){o.observe(el);});
+})();
+</script>
+
 
 <!-- TOTAL -->
 <div class="total">
